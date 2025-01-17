@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class ManaUIManager : MonoBehaviour
     [SerializeField] private List<Slider> manaProgressBars;
 
 
+    [Button]
     public void UpdateManaBar(int index, float value, Action onComplete = null)
     {
         manaProgressBars[index].DOValue(value, animationProgressDuration).OnComplete(() =>
