@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f74c7b323b47642adb1777d4b5e4fd, type: 3}
+  m_Name: New Gun Setting
+  m_EditorClassIdentifier: 
+  fireRate: 0.1
+  damage: 10
+  bulletInMage: 20
+  timeReload: 2
+  bulletPrefab: {fileID: 1751631214889673718, guid: 83ad5979b8b69ad41b84fb046f382961, type: 3}
