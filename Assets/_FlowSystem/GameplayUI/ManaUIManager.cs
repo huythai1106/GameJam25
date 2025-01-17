@@ -1,0 +1,22 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ManaUIManager : MonoBehaviour
+{
+    [SerializeField] private float animationProgressDuration = 0.5f;
+
+    [SerializeField] private List<Slider> manaProgressBars;
+
+
+    public void UpdateManaBar(int index, float value, Action onComplete = null)
+    {
+        manaProgressBars[index].DOValue(value, animationProgressDuration).OnComplete(() =>
+        {
+            onComplete?.Invoke();
+        });
+    }
+}
