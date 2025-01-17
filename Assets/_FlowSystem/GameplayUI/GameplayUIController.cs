@@ -59,5 +59,11 @@ namespace ParadoxGameStudio
             print("Jump button clicked");
             onJumpButtonClicked?.Invoke();
         }
+
+        public void OnAttackButtonClicked()
+        {
+            print("Jump button clicked");
+            onJumpButtonClicked?.Invoke();
+        }
     }
 }
