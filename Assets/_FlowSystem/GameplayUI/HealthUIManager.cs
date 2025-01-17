@@ -13,6 +13,8 @@ public class HealthUIManager : MonoBehaviour
 	[Button]
 	public void UpdateHealthBar(float value, float duration = -1, Action onComplete = null)
 	{
+		DOTween.Kill(heathProgressBar);
+
 		heathProgressBar.DOValue(value, duration > 0 ? duration : defaultAnimationProgressDuration).OnComplete(() =>
 		{
 			onComplete?.Invoke();

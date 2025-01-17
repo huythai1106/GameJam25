@@ -16,6 +16,7 @@ public class ManaUIManager : MonoBehaviour
     [Button]
     public void UpdateManaBar(int index, float value, Action onComplete = null)
     {
+        DOTween.Kill(manaProgressBars[index]);
         manaProgressBars[index].DOValue(value, animationProgressDuration).OnComplete(() =>
         {
             onComplete?.Invoke();
