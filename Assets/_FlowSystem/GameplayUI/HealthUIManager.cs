@@ -7,11 +7,11 @@ public class HealthUIManager : MonoBehaviour
 {
 	[SerializeField] private Slider heathProgressBar;
 
-	[SerializeField] private float animationProgressDuration = 0.5f;
+	[SerializeField] private float defaultAnimationProgressDuration = 0.5f;
 
-	public void UpdateHealthBar(float value, Action onComplete = null)
+	public void UpdateHealthBar(float value, float duration = -1, Action onComplete = null)
 	{
-		heathProgressBar.DOValue(value, animationProgressDuration).OnComplete(() =>
+		heathProgressBar.DOValue(value, duration > 0 ? duration : defaultAnimationProgressDuration).OnComplete(() =>
 		{
 			onComplete?.Invoke();
 		});
