@@ -36,7 +36,6 @@ namespace ParadoxGameStudio
         // event
         public EventData eventAttack_0;
         public EventData eventAttack_1;
-        public EventData eventAttack_2;
 
         protected override void Init()
         {
@@ -47,11 +46,9 @@ namespace ParadoxGameStudio
 
             eventAttack_0 = state.anim.skeleton.Data.FindEvent("Attack_0");
             eventAttack_1 = state.anim.skeleton.Data.FindEvent("Attack_1");
-            eventAttack_2 = state.anim.skeleton.Data.FindEvent("Attack_2");
 
             anim.AnimationState.Event += ActiveAttack_0;
             anim.AnimationState.Event += ActiveAttack_1;
-            anim.AnimationState.Event += ActiveAttack_2;
         }
 
         protected override void Update()
@@ -106,9 +103,6 @@ namespace ParadoxGameStudio
 
         public void UltimateAttack()
         {
-            if (isInAttack) return;
-            isInAttack = true;
-
             ChangeState(StatePlayer.Bubbling);
             TurnOnShield();
         }
@@ -134,13 +128,6 @@ namespace ParadoxGameStudio
                 b.transform.position = pointGun.position;
 
                 b.Fire(Mathf.Sign(transform.localScale.x));
-            }
-        }
-
-        public void ActiveAttack_2(TrackEntry entry, Spine.Event e)
-        {
-            if (e.Data == eventAttack_2)
-            {
             }
         }
 

@@ -25,7 +25,7 @@ namespace ParadoxGameStudio
                 Instance = this;
             }
 
-            Screen.orientation = ScreenOrientation.LandscapeRight;
+            Application.targetFrameRate = 60;
 
             Physics2D.IgnoreLayerCollision(6, 10, true);
             Physics2D.IgnoreLayerCollision(6, 9, true);
