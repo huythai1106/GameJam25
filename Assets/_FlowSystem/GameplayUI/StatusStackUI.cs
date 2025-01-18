@@ -18,13 +18,13 @@ public class StatusStackUI : MonoBehaviour
 		{
 			if (i < amount)
 			{
-				if (statusUnits[i].gameObject.activeSelf == false)
+				if (statusUnits[i].isActiveHPIcon() == false)
 				{
 
 					statusUnits[i].ScaleUpStatusUnit(scaleUpDuration);
 				}
 			}
-			else if (i >= amount && statusUnits[i].gameObject.activeSelf == true)
+			else if (i >= amount && statusUnits[i].isActiveHPIcon() == true)
 			{
 				statusUnits[i].ScaleDownStatusUnit(scaleDownDuration);
 
@@ -32,6 +32,8 @@ public class StatusStackUI : MonoBehaviour
 		}
 
 	}
+
+
 
 	public void GoMax()
 	{

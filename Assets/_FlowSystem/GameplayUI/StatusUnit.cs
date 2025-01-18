@@ -22,4 +22,8 @@ public class StatusUnit : MonoBehaviour
 			healthIcon.gameObject.SetActive(false);
 		});
 	}
+	public bool isActiveHPIcon()
+	{
+		return healthIcon.gameObject.activeSelf;
+	}
 }
