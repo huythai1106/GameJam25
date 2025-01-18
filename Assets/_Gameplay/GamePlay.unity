@@ -497,11 +497,21 @@ MonoBehaviour:
   shieldParticle: {fileID: 5327853476147330983}
   isDead: 0
   gun: {fileID: 0}
+  movement:
+    character: {fileID: 0}
+    body: {fileID: 0}
+    rotate: {x: 0, y: 0}
+    directPlayer: 0
+  state:
+    currentState: 0
+    character: {fileID: 0}
+    anim: {fileID: 0}
   currentOneWayPlatform: {fileID: 0}
   range: 0
   isShoot: 0
   maxCountJump: 2
   statePlayer: 0
+  isCharging: 0
   defaultGravity: 2.5
   center: {fileID: 68785446}
   size: {x: 0.2, y: 0.05}
@@ -922,7 +932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 542447505121367308, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -60
+      value: -78.5
       objectReference: {fileID: 0}
     - target: {fileID: 1014613521141685667, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: m_Name
@@ -1926,7 +1936,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
