@@ -173,7 +173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &90360614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,13 +200,13 @@ MonoBehaviour:
   pointGun: {fileID: 241883112}
   anim: {fileID: 0}
   shieldParticle: {fileID: 0}
+  isInAttack: 0
   isDead: 0
   movement:
     character: {fileID: 0}
     body: {fileID: 0}
     rotate: {x: 0, y: 0}
     directPlayer: 0
-  isInAttack: 0
 --- !u!61 &90360615
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -461,7 +461,6 @@ GameObject:
   - component: {fileID: 582888360}
   - component: {fileID: 582888359}
   - component: {fileID: 582888358}
-  - component: {fileID: 582888364}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -495,13 +494,15 @@ MonoBehaviour:
   pointGun: {fileID: 1976259590}
   anim: {fileID: 1487664661}
   shieldParticle: {fileID: 5327853476147330983}
+  isInAttack: 0
   isDead: 0
-  gun: {fileID: 0}
+  gunSetting: {fileID: 11400000, guid: 32dbb02a26b61c14396338ff01352cbf, type: 2}
   movement:
     character: {fileID: 0}
     body: {fileID: 0}
     rotate: {x: 0, y: 0}
     directPlayer: 0
+    isGrounded: 0
   state:
     currentState: 0
     character: {fileID: 0}
@@ -670,24 +671,6 @@ Transform:
   - {fileID: 1487664664}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &582888364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582888357}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fa748935ee87334f8684549673670a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 582888358}
-  gunSetting: {fileID: 11400000, guid: 32dbb02a26b61c14396338ff01352cbf, type: 2}
-  gunProperties:
-    bulletRemainingInMage: 0
-    timeReload: 0
-  isReloading: 0
 --- !u!1 &601993923
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,6 +942,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
+      propertyPath: OnReachThreshholdAttack.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: onBaseAttackCast.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
@@ -999,6 +986,10 @@ PrefabInstance:
       value: Attack
       objectReference: {fileID: 0}
     - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
+      propertyPath: OnReachThreshholdAttack.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: onBaseUltimateCast.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -1019,8 +1010,20 @@ PrefabInstance:
       value: ChargeAttack
       objectReference: {fileID: 0}
     - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
+      propertyPath: OnReachThreshholdAttack.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 582888358}
+    - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: onJumpButtonClicked.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
+      propertyPath: OnReachThreshholdAttack.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
+      propertyPath: OnReachThreshholdAttack.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartCharge
       objectReference: {fileID: 0}
     - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: onBaseAttackCast.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1039,6 +1042,10 @@ PrefabInstance:
       value: ParadoxGameStudio.Player, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
+      propertyPath: OnReachThreshholdAttack.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ParadoxGameStudio.Player, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: onBaseAttackCast.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -1052,6 +1059,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
       propertyPath: onJumpButtonClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1303016203595825062, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
+      propertyPath: OnReachThreshholdAttack.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1310357530882114573, guid: cf405ce5e143b3441ad1fbe09b6608e6, type: 3}
@@ -2175,7 +2186,7 @@ Transform:
   m_GameObject: {fileID: 1976259589}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.78, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0.9, y: 0.408, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2198,12 +2209,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3393416323328606212, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3393416323328606212, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3393416323328606212, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3393416323328606212, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.16
       objectReference: {fileID: 0}
     - target: {fileID: 3393416323328606212, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3393416323328606212, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2236,6 +2259,10 @@ PrefabInstance:
     - target: {fileID: 3393416323328606212, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5307999688334643537, guid: 8c187d3b3db7e2543b59f03403d5d74f, type: 3}
+      propertyPath: simulationSpeed
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

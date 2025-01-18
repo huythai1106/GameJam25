@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Spine;
 using UnityEngine;
 
 namespace ParadoxGameStudio
@@ -14,7 +15,8 @@ namespace ParadoxGameStudio
     public class Player : BaseCharacter
     {
         [Header("Player")]
-        public Gun gun;
+        // public Gun gun;
+        public GunSetting gunSetting;
         public PlayerMovement movement;
         public PlayerState state;
         public GameObject currentOneWayPlatform;
@@ -31,23 +33,31 @@ namespace ParadoxGameStudio
         public Transform center;
         public Vector2 size;
 
+        // event
+        public EventData eventAttack_0;
+        public EventData eventAttack_1;
+        public EventData eventAttack_2;
+
         protected override void Init()
         {
             base.Init();
             movement = new PlayerMovement(this, body);
             state = new PlayerState(this, anim);
             body.gravityScale = defaultGravity;
+
+            eventAttack_0 = state.anim.skeleton.Data.FindEvent("Attack_0");
+            eventAttack_1 = state.anim.skeleton.Data.FindEvent("Attack_1");
+            eventAttack_2 = state.anim.skeleton.Data.FindEvent("Attack_2");
+
+            anim.AnimationState.Event += ActiveAttack_0;
+            anim.AnimationState.Event += ActiveAttack_1;
+            anim.AnimationState.Event += ActiveAttack_2;
         }
 
         protected override void Update()
         {
             base.Update();
             movement.Update();
-
-            if (isShoot)
-            {
-                gun.Shoot();
-            }
         }
 
         protected override void FixedUpdate()
@@ -58,8 +68,80 @@ namespace ParadoxGameStudio
 
         public override void Attack()
         {
-            base.Attack();
-            gun.Shoot();
+            if (isInAttack) return;
+            isInAttack = true;
+
+            state.PlayAnim(1, "Attack_0", false, (e) =>
+            {
+                isInAttack = false;
+                anim.state.AddEmptyAnimation(1, 0.1f, 0);
+            });
+        }
+
+        public void ChargeAttack()
+        {
+            if (isInAttack) return;
+            isInAttack = true;
+
+            isCharging = true;
+            if (statePlayer == StatePlayer.Normal)
+            {
+                body.gravityScale = 0.7f;
+            }
+            body.velocity = Vector2.zero;
+
+            state.PlayAnim(1, "Attack_1", false, (e) =>
+           {
+               isInAttack = false;
+               anim.state.AddEmptyAnimation(1, 0.1f, 0);
+
+               if (statePlayer == StatePlayer.Normal)
+               {
+                   body.gravityScale = defaultGravity;
+               }
+
+               isCharging = false;
+           });
+        }
+
+        public void UltimateAttack()
+        {
+            if (isInAttack) return;
+            isInAttack = true;
+
+            ChangeState(StatePlayer.Bubbling);
+            TurnOnShield();
+        }
+
+        public void ActiveAttack_0(TrackEntry entry, Spine.Event e)
+        {
+            if (e.Data == eventAttack_0)
+            {
+                Bullet b = Instantiate(gunSetting.bulletPrefab);
+                b.Init(this);
+                b.transform.position = pointGun.position;
+
+                b.Fire(Mathf.Sign(transform.localScale.x));
+            }
+        }
+
+        public void ActiveAttack_1(TrackEntry entry, Spine.Event e)
+        {
+            if (e.Data == eventAttack_1)
+            {
+                Bullet b = Instantiate(gunSetting.bulletPrefab);
+                b.Init(this);
+                b.transform.position = pointGun.position;
+
+                b.Fire(Mathf.Sign(transform.localScale.x));
+            }
+        }
+
+        public void ActiveAttack_2(TrackEntry entry, Spine.Event e)
+        {
+            if (e.Data == eventAttack_2)
+            {
+            }
         }
 
         public void Jump()
@@ -74,17 +156,7 @@ namespace ParadoxGameStudio
             }
         }
 
-        public void UltimateAttack()
-        {
-            Debug.Log("UltimateAttack");
-            ChangeState(StatePlayer.Bubbling);
-            TurnOnShield();
-        }
 
-        public void ChargeAttack()
-        {
-            Debug.Log("CaseAttack");
-        }
 
         public override void TurnOnShield()
         {

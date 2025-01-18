@@ -8,7 +8,7 @@ namespace ParadoxGameStudio
     [Serializable]
     public class PlayerMovement : BaseMovement
     {
-        internal bool isGrounded = false;
+        public bool isGrounded = false;
         internal int jumpStep = 1;
         internal float jumpBufferCounter = 0;
         private readonly float bufferTime = 0.1f;
@@ -23,7 +23,7 @@ namespace ParadoxGameStudio
         {
             base.Update();
 
-            CheckGrounded();
+            CheckState();
             if (jumpBufferCounter > 0 && isGrounded)
             {
                 Jump();
@@ -39,20 +39,27 @@ namespace ParadoxGameStudio
 
         public void CheckState()
         {
-            if (isGrounded)
+            if (player.statePlayer == StatePlayer.Bubbling)
             {
-                if (rotate.x != 0)
-                {
-                    player.state.SetStatePlayer(StateCharacter.Run);
-                }
-                else
-                {
-                    player.state.SetStatePlayer(StateCharacter.Idle);
-                }
+                player.state.SetStatePlayer(StateCharacter.Fly);
             }
             else
             {
-                player.state.SetStatePlayer(StateCharacter.Jump);
+                if (isGrounded)
+                {
+                    if (rotate.x != 0)
+                    {
+                        player.state.SetStatePlayer(StateCharacter.Run);
+                    }
+                    else
+                    {
+                        player.state.SetStatePlayer(StateCharacter.Idle);
+                    }
+                }
+                else
+                {
+                    player.state.SetStatePlayer(StateCharacter.Jump);
+                }
             }
         }
 
@@ -94,11 +101,11 @@ namespace ParadoxGameStudio
             jumpBufferCounter = 0f;
         }
 
-        private void CheckGrounded()
-        {
-            RaycastHit2D ray = Physics2D.BoxCast(player.center.position, player.size, 0f, Vector2.down, .01f, GameManager.Instance.layerGround);
-            isGrounded = ray.collider != null;
-        }
+        // private void CheckGrounded()
+        // {
+        //     // RaycastHit2D ray = Physics2D.BoxCast(player.center.position, player.size, 0f, Vector2.down, .01f, GameManager.Instance.layerGround);
+        //     // isGrounded = ray.collider != null;
+        // }
 
         public void ResetMoverment()
         {

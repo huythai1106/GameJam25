@@ -18,7 +18,11 @@ namespace ParadoxGameStudio
 
         public void SetRotation(Vector2 v)
         {
-            playerCharacter.movement.rotate = v.normalized;
+            if (playerCharacter.isCharging) playerCharacter.movement.rotate = Vector2.zero;
+            else
+            {
+                playerCharacter.movement.rotate = v.normalized;
+            }
         }
 
         protected override void HandleControl()

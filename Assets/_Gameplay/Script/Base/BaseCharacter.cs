@@ -32,6 +32,7 @@ namespace ParadoxGameStudio
         public Transform pointGun;
         public SkeletonAnimation anim;
         public ParticleSystem shieldParticle;
+        public bool isInAttack = false;
 
         public bool isDead = false;
         // public Dictionary<TypeEffect, BaseEffect> effects = new();
