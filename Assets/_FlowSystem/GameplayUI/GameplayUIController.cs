@@ -10,13 +10,6 @@ namespace ParadoxGameStudio
 
     public class GameplayUIController : MonoBehaviour
     {
-        [SerializeField] private HealthUIManager healthUIManager;
-        [SerializeField] private ManaUIManager manaUIManager;
-        [SerializeField] private InputControllerBase inputController;
-
-        [SerializeField] private Button ultimateButton;
-
-
         private bool isHoldingUltimateButton = false;
         private float ultimateHoldingTime;
         [SerializeField] private float timeToCastSecondUltimate = 1f;
@@ -55,6 +48,12 @@ namespace ParadoxGameStudio
         }
 
         public void OnJumpButtonClicked()
+        {
+            print("Jump button clicked");
+            onJumpButtonClicked?.Invoke();
+        }
+
+        public void OnAttackButtonClicked()
         {
             print("Jump button clicked");
             onJumpButtonClicked?.Invoke();
