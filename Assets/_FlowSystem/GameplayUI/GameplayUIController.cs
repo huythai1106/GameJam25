@@ -87,6 +87,7 @@ namespace ParadoxGameStudio
                 onBaseAttackCast?.Invoke();
             }
             attackHoldingTime = 0;
+            isHoldingAttackButton = false;
             isReachedThreshholdAttack = false;
 
         }
