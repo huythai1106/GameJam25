@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -53,12 +54,12 @@ namespace ParadoxGameStudio
             if (ultimateHoldingTime > timeToCastSecondUltimate)
             {
                 print("Second ultimate cast");
-                onBaseUltimateCast?.Invoke();
+                onSecondUltimateCast?.Invoke();
             }
             else
             {
+                onBaseUltimateCast?.Invoke();
                 print("Base ultimate cast");
-                onSecondUltimateCast?.Invoke();
             }
 
             ultimateHoldingTime = 0;
@@ -70,12 +71,12 @@ namespace ParadoxGameStudio
             if (attackHoldingTime > timeToCastSecondAttack)
             {
                 print("Second attack cast");
-                onBaseAttackCast?.Invoke();
+                onSecondAttackCast?.Invoke();
             }
             else
             {
                 print("Base attack cast");
-                onSecondAttackCast?.Invoke();
+                onBaseAttackCast?.Invoke();
             }
             attackHoldingTime = 0;
         }
