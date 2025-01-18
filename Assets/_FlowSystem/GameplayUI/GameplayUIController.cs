@@ -15,6 +15,7 @@ namespace ParadoxGameStudio
         private bool isHoldingAttackButton = false;
         private float ultimateHoldingTime;
         private float attackHoldingTime;
+        private bool isReachedThreshholdAttack;
         [SerializeField] private float timeToCastSecondUltimate = 1f;
         [SerializeField] private float timeToCastSecondAttack = 1f;
 
@@ -23,6 +24,8 @@ namespace ParadoxGameStudio
         [SerializeField] private UnityEvent onJumpButtonClicked;
         [SerializeField] private UnityEvent onBaseAttackCast;
         [SerializeField] private UnityEvent onSecondAttackCast;
+        [SerializeField] private UnityEvent OnReachThreshholdAttack;
+
 
         private void Update()
         {
@@ -33,6 +36,11 @@ namespace ParadoxGameStudio
             if (isHoldingAttackButton)
             {
                 attackHoldingTime += Time.deltaTime;
+                if (attackHoldingTime - timeToCastSecondAttack >= 0 && isReachedThreshholdAttack == false)
+                {
+                    isReachedThreshholdAttack = true;
+                    OnReachThreshholdAttack?.Invoke();
+                }
             }
         }
 
@@ -79,6 +87,8 @@ namespace ParadoxGameStudio
                 onBaseAttackCast?.Invoke();
             }
             attackHoldingTime = 0;
+            isReachedThreshholdAttack = false;
+
         }
 
         public void OnJumpButtonClicked()
