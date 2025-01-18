@@ -4,17 +4,27 @@ using UnityEngine;
 
 namespace ParadoxGameStudio
 {
+    public enum DirectPlayer
+    {
+        Left,
+        Right,
+        Idle
+    }
+
     public class PlayerMovement : BaseMovement
     {
-        internal bool isMoveLeft = false;
-        internal bool isMoveRight = false;
+        internal DirectPlayer directPlayer = DirectPlayer.Idle;
         internal bool isGrounded = false;
         internal int jumpStep = 1;
         internal float jumpBufferCounter = 0;
         private readonly float bufferTime = 0.1f;
-        private Vector2 rotate;
+        public Vector2 rotate;
+        private Player player;
 
-        public PlayerMovement(BaseCharacter character, Rigidbody2D body) : base(character, body) { }
+        public PlayerMovement(BaseCharacter character, Rigidbody2D body) : base(character, body)
+        {
+            player = character as Player;
+        }
 
         public override void Update()
         {
@@ -25,22 +35,58 @@ namespace ParadoxGameStudio
                 Jump();
             }
             jumpBufferCounter -= Time.deltaTime;
+
+            CheckRotation();
+        }
+
+        private void CheckRotation()
+        {
+            if (player.statePlayer == StatePlayer.Normal)
+            {
+                if (rotate.x > 0)
+                {
+                    directPlayer = DirectPlayer.Right;
+                }
+                else if (rotate.x < 0)
+                {
+                    directPlayer = DirectPlayer.Left;
+                }
+                else
+                {
+                    directPlayer = DirectPlayer.Idle;
+                }
+            }
+            else
+            {
+
+            }
         }
 
         public override void FixedUpdate()
         {
             Moving();
-            CalculateRotation();
         }
 
         private void Moving()
         {
-            if (isMoveLeft)
+            if (player.statePlayer == StatePlayer.Normal)
+            {
+                MovingNormal();
+            }
+            else
+            {
+                MovingBubbling();
+            }
+        }
+
+        private void MovingNormal()
+        {
+            if (directPlayer == DirectPlayer.Left)
             {
                 body.velocity = new(-character.properties.speed, body.velocity.y);
                 character.FlipCharacter(false);
             }
-            else if (isMoveRight)
+            else if (directPlayer == DirectPlayer.Right)
             {
                 body.velocity = new(character.properties.speed, body.velocity.y);
                 character.FlipCharacter(true);
@@ -51,29 +97,7 @@ namespace ParadoxGameStudio
             }
         }
 
-        private void CalculateRotation()
-        {
-            if (character.currentTarget)
-            {
-                rotate = character.currentTarget.position - character.transform.position;
-                character.FlipCharacter(rotate.x > 0);
-                RotatePlayer(rotate);
-            }
-            else
-            {
-                rotate = Vector2.zero;
-                if (isMoveLeft)
-                {
-                    character.FlipCharacter(false);
-                }
-                else if (isMoveRight)
-                {
-                    character.FlipCharacter(true);
-                }
-            }
-        }
-
-        public void RotatePlayer(Vector2 r)
+        private void MovingBubbling()
         {
 
         }
@@ -84,7 +108,6 @@ namespace ParadoxGameStudio
             if (!isGrounded && jumpStep > 0)
             {
                 Jump();
-                // EffectManager.Instance.CreatedEffect("doubleJump", _character.transform.position);
                 jumpStep--;
             }
         }
@@ -98,15 +121,13 @@ namespace ParadoxGameStudio
 
         private void CheckGrounded()
         {
-            RaycastHit2D ray = Physics2D.BoxCast((character as Player).center.position, (character as Player).size, 0f, Vector2.down, .01f, GameManager.Instance.layerGround);
-
+            RaycastHit2D ray = Physics2D.BoxCast(player.center.position, player.size, 0f, Vector2.down, .01f, GameManager.Instance.layerGround);
             isGrounded = ray.collider != null;
         }
 
         public void ResetMoverment()
         {
-            isMoveLeft = false;
-            isMoveRight = false;
+            directPlayer = DirectPlayer.Idle;
             isGrounded = false;
         }
     }

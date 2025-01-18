@@ -21,20 +21,20 @@ namespace ParadoxGameStudio
         {
             if (Input.GetKeyDown(_keyBoard.left))
             {
-                playerCharacter.movement.isMoveLeft = true;
+                playerCharacter.movement.rotate = Vector2.left;
             }
             else if (Input.GetKeyUp(_keyBoard.left))
             {
-                playerCharacter.movement.isMoveLeft = false;
+                playerCharacter.movement.rotate = Vector2.zero;
             }
 
             if (Input.GetKeyDown(_keyBoard.right))
             {
-                playerCharacter.movement.isMoveRight = true;
+                playerCharacter.movement.rotate = Vector2.right;
             }
             else if (Input.GetKeyUp(_keyBoard.right))
             {
-                playerCharacter.movement.isMoveRight = false;
+                playerCharacter.movement.rotate = Vector2.zero;
             }
 
             if (Input.GetKeyDown(_keyBoard.up))

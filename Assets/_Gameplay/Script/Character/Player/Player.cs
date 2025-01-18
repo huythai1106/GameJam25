@@ -4,6 +4,12 @@ using UnityEngine;
 
 namespace ParadoxGameStudio
 {
+    public enum StatePlayer
+    {
+        Normal,
+        Bubbling
+    }
+
     public class Player : BaseCharacter
     {
         [Header("Player")]
@@ -13,6 +19,7 @@ namespace ParadoxGameStudio
         public float range;
         public bool isShoot = false;
         public int maxCountJump = 1;
+        public StatePlayer statePlayer = StatePlayer.Normal;
 
 
         [Header("CheckGround")]
@@ -97,6 +104,30 @@ namespace ParadoxGameStudio
         public void ButtonDown()
         {
             StartCoroutine(DisableCollision());
+        }
+
+        public void ChangeState(StatePlayer state)
+        {
+            statePlayer = state;
+
+            if (statePlayer == StatePlayer.Normal)
+            {
+                EventChangeNormal();
+            }
+            else
+            {
+                EventChangeBubbling();
+            }
+        }
+
+        public void EventChangeNormal()
+        {
+
+        }
+
+        public void EventChangeBubbling()
+        {
+
         }
     }
 }
