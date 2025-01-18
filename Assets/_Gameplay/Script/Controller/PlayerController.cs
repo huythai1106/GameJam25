@@ -16,6 +16,10 @@ namespace ParadoxGameStudio
             _keyBoard = GameManager.Instance.keyboardSetting.playerKeyboard;
         }
 
+        public void SetRotation(Vector2 v)
+        {
+            playerCharacter.movement.rotate = v;
+        }
 
         protected override void HandleControll()
         {
