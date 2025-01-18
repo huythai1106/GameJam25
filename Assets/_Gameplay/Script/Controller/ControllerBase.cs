@@ -16,10 +16,10 @@ namespace ParadoxGameStudio
 
         private void Update()
         {
-            HandleControll();
+            HandleControl();
         }
 
-        protected virtual void HandleControll() { }
+        protected virtual void HandleControl() { }
     }
 
 }

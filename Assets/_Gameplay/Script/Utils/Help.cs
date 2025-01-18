@@ -30,7 +30,9 @@ namespace ParadoxGameStudio
     }
     public static class Common
     {
-
+        public static float InitVel(float distance, float angle = 45, float time = 3)
+        {
+            return distance / (Mathf.Cos(angle) * time);
+        }
     }
-
 }

@@ -61,7 +61,7 @@ namespace ParadoxGameStudio
                 gunProperties.bulletRemainingInMage--;
 
                 CreateBullet();
-                PlaySEShoot();
+                PlaySoundEffectShoot();
                 PlayMuzzleFlash();
             }
             else
@@ -79,13 +79,14 @@ namespace ParadoxGameStudio
                 return;
             }
 
-            var b = Instantiate(gunSetting.bulletPrefab);
+            Bullet b = Instantiate(gunSetting.bulletPrefab);
+            b.Init(this);
             b.transform.position = player.pointGun.position;
 
             b.Fire(Mathf.Sign(player.transform.localScale.x));
         }
 
-        private void PlaySEShoot()
+        private void PlaySoundEffectShoot()
         {
 
         }

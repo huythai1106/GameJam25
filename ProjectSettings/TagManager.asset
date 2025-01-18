@@ -6,6 +6,7 @@ TagManager:
   tags:
   - OneWayPlatform
   - Ground
+  - Monster
   layers:
   - Default
   - TransparentFX

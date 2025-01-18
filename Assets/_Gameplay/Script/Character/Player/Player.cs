@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace ParadoxGameStudio
@@ -21,17 +22,18 @@ namespace ParadoxGameStudio
         public int maxCountJump = 1;
         public StatePlayer statePlayer = StatePlayer.Normal;
 
+        [SerializeField] private float defaultGravity;
+
 
         [Header("CheckGround")]
         public Transform center;
         public Vector2 size;
 
-        public Transform pointGun;
-
         protected override void Init()
         {
             base.Init();
             movement = new PlayerMovement(this, body);
+            body.gravityScale = defaultGravity;
         }
 
         protected override void Update()
@@ -51,11 +53,58 @@ namespace ParadoxGameStudio
             movement.FixedUpdate();
         }
 
+        public override void Attack()
+        {
+            base.Attack();
+            gun.Shoot();
+        }
+
+        public void Jump()
+        {
+            if (statePlayer == StatePlayer.Bubbling)
+            {
+                BreakShield();
+            }
+            else
+            {
+                movement.HandleJump();
+            }
+        }
+
+        public void UltimateAttack()
+        {
+            Debug.Log("UltimateAttack");
+            ChangeState(StatePlayer.Bubbling);
+            TurnOnShield();
+        }
+
+        public void ChargeAttack()
+        {
+            Debug.Log("CaseAttack");
+        }
+
+        public override void TurnOnShield()
+        {
+            base.TurnOnShield();
+            shieldParticle.gameObject.SetActive(true);
+            shieldParticle.Play();
+        }
+
+        public override void BreakShield()
+        {
+            ChangeState(StatePlayer.Normal);
+            properties.healthShield = 0;
+
+            shieldParticle.Pause();
+            shieldParticle.gameObject.SetActive(false);
+        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             Vector3 hit = collision.contacts[0].normal;
             if (hit.y > 0)
             {
+                EffectManager.Instance.CreatedEffect("hitGround", center);
                 movement.isGrounded = true;
                 // _character.state.SetStatePlayer(StatePlayer.Jump, false);
                 movement.jumpStep = maxCountJump;
@@ -67,11 +116,6 @@ namespace ParadoxGameStudio
                     currentOneWayPlatform = collision.gameObject;
                 }
             }
-        }
-
-        protected override void SetTarget()
-        {
-
         }
 
         private void OnCollisionExit2D(Collision2D collision)
@@ -122,12 +166,12 @@ namespace ParadoxGameStudio
 
         public void EventChangeNormal()
         {
-
+            body.gravityScale = defaultGravity;
         }
 
         public void EventChangeBubbling()
         {
-
+            body.gravityScale = 0;
         }
     }
 }

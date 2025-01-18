@@ -18,10 +18,10 @@ namespace ParadoxGameStudio
 
         public void SetRotation(Vector2 v)
         {
-            playerCharacter.movement.rotate = v;
+            playerCharacter.movement.rotate = v.normalized;
         }
 
-        protected override void HandleControll()
+        protected override void HandleControl()
         {
             if (Input.GetKeyDown(_keyBoard.left))
             {
@@ -49,6 +49,21 @@ namespace ParadoxGameStudio
             if (Input.GetKeyDown(_keyBoard.down))
             {
                 playerCharacter.ButtonDown();
+            }
+
+            if (Input.GetKeyDown(_keyBoard.attack))
+            {
+                playerCharacter.Attack();
+            }
+
+            if (Input.GetKeyDown(_keyBoard.chargeAttack))
+            {
+                playerCharacter.ChargeAttack();
+            }
+
+            if (Input.GetKeyDown(_keyBoard.specialAttack))
+            {
+                playerCharacter.UltimateAttack();
             }
         }
     }

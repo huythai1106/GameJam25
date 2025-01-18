@@ -4,21 +4,12 @@ using UnityEngine;
 
 namespace ParadoxGameStudio
 {
-    public enum DirectPlayer
-    {
-        Left,
-        Right,
-        Idle
-    }
-
     public class PlayerMovement : BaseMovement
     {
-        internal DirectPlayer directPlayer = DirectPlayer.Idle;
         internal bool isGrounded = false;
         internal int jumpStep = 1;
         internal float jumpBufferCounter = 0;
         private readonly float bufferTime = 0.1f;
-        public Vector2 rotate;
         private Player player;
 
         public PlayerMovement(BaseCharacter character, Rigidbody2D body) : base(character, body)
@@ -28,38 +19,15 @@ namespace ParadoxGameStudio
 
         public override void Update()
         {
-            CheckGrounded();
+            base.Update();
 
+            CheckGrounded();
             if (jumpBufferCounter > 0 && isGrounded)
             {
                 Jump();
             }
             jumpBufferCounter -= Time.deltaTime;
 
-            CheckRotation();
-        }
-
-        private void CheckRotation()
-        {
-            if (player.statePlayer == StatePlayer.Normal)
-            {
-                if (rotate.x > 0)
-                {
-                    directPlayer = DirectPlayer.Right;
-                }
-                else if (rotate.x < 0)
-                {
-                    directPlayer = DirectPlayer.Left;
-                }
-                else
-                {
-                    directPlayer = DirectPlayer.Idle;
-                }
-            }
-            else
-            {
-
-            }
         }
 
         public override void FixedUpdate()
@@ -79,27 +47,13 @@ namespace ParadoxGameStudio
             }
         }
 
-        private void MovingNormal()
-        {
-            if (directPlayer == DirectPlayer.Left)
-            {
-                body.velocity = new(-character.properties.speed, body.velocity.y);
-                character.FlipCharacter(false);
-            }
-            else if (directPlayer == DirectPlayer.Right)
-            {
-                body.velocity = new(character.properties.speed, body.velocity.y);
-                character.FlipCharacter(true);
-            }
-            else
-            {
-                body.velocity = new(0, body.velocity.y);
-            }
-        }
+
 
         private void MovingBubbling()
         {
+            character.body.velocity = rotate * 5;
 
+            FlipFollowRotation();
         }
 
         public void HandleJump()

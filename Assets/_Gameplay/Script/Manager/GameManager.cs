@@ -7,6 +7,7 @@ namespace ParadoxGameStudio
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
+        public Player player;
 
         [Header("Layout")]
         public LayerMask layerPlayer;
@@ -27,6 +28,7 @@ namespace ParadoxGameStudio
             Screen.orientation = ScreenOrientation.LandscapeRight;
 
             Physics2D.IgnoreLayerCollision(6, 10, true);
+            Physics2D.IgnoreLayerCollision(6, 9, true);
             Physics2D.IgnoreLayerCollision(10, 10, true);
         }
 
@@ -34,6 +36,7 @@ namespace ParadoxGameStudio
         {
             Instance = null;
             Physics2D.IgnoreLayerCollision(6, 10, false);
+            Physics2D.IgnoreLayerCollision(6, 9, false);
             Physics2D.IgnoreLayerCollision(10, 10, false);
         }
     }

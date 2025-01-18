@@ -9,8 +9,11 @@ namespace ParadoxGameStudio
     {
         public float speed;
         public float maxHealth;
+        public float maxHealthShield;
+        public float startHealShield;
         public float jumpPower;
         public float mana;
+        public float rangeAttack;
     }
 
 }

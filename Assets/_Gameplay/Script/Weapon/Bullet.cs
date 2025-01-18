@@ -8,9 +8,12 @@ namespace ParadoxGameStudio
     {
         [SerializeField] private Rigidbody2D body;
         [SerializeField] private float force;
+        private Gun gun;
+        private bool isTrigger = false;
 
-        private void Awake()
+        public void Init(Gun gun)
         {
+            this.gun = gun;
             Destroy(gameObject, 3f);
         }
 
@@ -19,8 +22,17 @@ namespace ParadoxGameStudio
             body.velocity = force * direct * Vector2.right;
         }
 
-        private void OnCollisionEnter2D(Collision2D other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
+            if (isTrigger) return;
+            isTrigger = true;
+
+            if (other.CompareTag("Monster"))
+            {
+                BaseCrep creep = other.GetComponent<BaseCrep>();
+                creep.HitDamage(gun.gunSetting.damage);
+            }
+
             Destroy(gameObject);
         }
     }

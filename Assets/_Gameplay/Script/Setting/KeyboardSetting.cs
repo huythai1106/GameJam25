@@ -12,13 +12,13 @@ namespace ParadoxGameStudio
         [System.Serializable]
         public class KeyBoard
         {
-            public KeyCode left, right, up, down, attack, specialAttack;
+            public KeyCode left, right, up, down, attack, specialAttack, chargeAttack;
 
             public KeyCode this[int i]
             {
                 get
                 {
-                    return new KeyCode[] { left, right, up, down, }[i];
+                    return new KeyCode[] { left, right, up, down, attack, specialAttack, chargeAttack }[i];
                 }
             }
         }
