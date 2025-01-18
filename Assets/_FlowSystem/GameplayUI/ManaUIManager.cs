@@ -1,27 +1,42 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using Sirenix.OdinInspector;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class ManaUIManager : MonoBehaviour
 {
+    public static ManaUIManager Instance;
     [SerializeField] private float defaultAnimationProgressDuration = 0.5f;
 
-    [SerializeField] private List<Slider> manaProgressBars;
-
-
+    [SerializeField]
+    private List<StatusStackUI> manaStackList;
     [Button]
-    public void UpdateManaBar(int index, float value, float duration, Action onComplete = null)
+    public void UpdateManaBar(int value, float duration, Action onComplete = null)
     {
-        DOTween.Kill(manaProgressBars[index]);
-        manaProgressBars[index].DOValue(value, duration > 0 ? duration : defaultAnimationProgressDuration).OnComplete(() =>
+        int currentValue = value;
+        for (int i = 0; i < manaStackList.Count; i++)
         {
-            onComplete?.Invoke();
-        });
+            if (currentValue >= manaStackList[i].GetMaxUnitCount())
+            {
+                manaStackList[i].GoMax();
+                currentValue -= manaStackList[i].GetMaxUnitCount();
+            }
+            else
+            {
+                manaStackList[i].Change(currentValue);
+            }
+        }
     }
 
+    [Button]
+    public void Setup(int numberOfManaStack)
+    {
+    }
 
+    private void Awake()
+    {
+        Instance = this;
+    }
 }

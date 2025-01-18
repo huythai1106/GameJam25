@@ -18,4 +18,9 @@ public class JoyStickerController : InputControllerBase
 		return new Vector2(_joystick.Horizontal, _joystick.Vertical);
 	}
 
+	public void SetEnable(bool enable)
+	{
+		_joystick.enabled = enable;
+	}
+
 }
