@@ -11,17 +11,27 @@ namespace ParadoxGameStudio
     public class GameplayUIController : MonoBehaviour
     {
         private bool isHoldingUltimateButton = false;
+        private bool isHoldingAttackButton = false;
         private float ultimateHoldingTime;
+        private float attackHoldingTime;
         [SerializeField] private float timeToCastSecondUltimate = 1f;
+        [SerializeField] private float timeToCastSecondAttack = 1f;
 
         [SerializeField] private UnityEvent onBaseUltimateCast;
         [SerializeField] private UnityEvent onSecondUltimateCast;
         [SerializeField] private UnityEvent onJumpButtonClicked;
+        [SerializeField] private UnityEvent onBaseAttackCast;
+        [SerializeField] private UnityEvent onSecondAttackCast;
+
         private void Update()
         {
             if (isHoldingUltimateButton)
             {
                 ultimateHoldingTime += Time.deltaTime;
+            }
+            if (isHoldingAttackButton)
+            {
+                attackHoldingTime += Time.deltaTime;
             }
         }
 
@@ -29,6 +39,11 @@ namespace ParadoxGameStudio
         {
             print("Ultimate button down");
             isHoldingUltimateButton = true;
+        }
+        public void OnAttackButtonDown()
+        {
+            print("Attack button down");
+            isHoldingAttackButton = true;
         }
 
         public void OnUltimateButtonUp()
@@ -45,15 +60,27 @@ namespace ParadoxGameStudio
                 print("Base ultimate cast");
                 onSecondUltimateCast?.Invoke();
             }
+
+            ultimateHoldingTime = 0;
+        }
+        public void OnAttackButtonUp()
+        {
+            isHoldingAttackButton = false;
+
+            if (attackHoldingTime > timeToCastSecondAttack)
+            {
+                print("Second attack cast");
+                onBaseAttackCast?.Invoke();
+            }
+            else
+            {
+                print("Base attack cast");
+                onSecondAttackCast?.Invoke();
+            }
+            attackHoldingTime = 0;
         }
 
         public void OnJumpButtonClicked()
-        {
-            print("Jump button clicked");
-            onJumpButtonClicked?.Invoke();
-        }
-
-        public void OnAttackButtonClicked()
         {
             print("Jump button clicked");
             onJumpButtonClicked?.Invoke();
