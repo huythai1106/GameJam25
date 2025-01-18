@@ -9,7 +9,6 @@ namespace ParadoxGameStudio
     {
         public EventData eventData;
         public BaseMovement movement;
-        public bool isInAttack = false;
 
         protected override void Init()
         {

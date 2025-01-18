@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Spine;
 using Spine.Unity;
 using UnityEngine;
 
@@ -10,13 +11,15 @@ namespace ParadoxGameStudio
     {
         Idle,
         Run,
-        Jump
+        Jump,
+        Fly,
     }
 
     [Serializable]
     public class PlayerState : BaseState<StateCharacter>
     {
         public PlayerState(BaseCharacter character, SkeletonAnimation animation) : base(character, animation) { }
+
 
         public override void Init()
         {
@@ -37,12 +40,20 @@ namespace ParadoxGameStudio
                 case StateCharacter.Run:
                     anim.state.SetAnimation(0, "Run_0", true);
                     break;
+                case StateCharacter.Fly:
+                    anim.state.SetAnimation(0, "Attack_2B", true);
+                    break;
             }
         }
 
         protected override bool CheckCondition(StateCharacter name)
         {
             return currentState != name;
+        }
+
+        public void PlayAnim(int track, string name, bool value, Spine.AnimationState.TrackEntryDelegate callback = null)
+        {
+            anim.state.SetAnimation(track, name, value).Complete += callback;
         }
     }
 }

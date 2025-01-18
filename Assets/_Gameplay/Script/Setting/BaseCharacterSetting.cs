@@ -14,6 +14,7 @@ namespace ParadoxGameStudio
         public float jumpPower;
         public float mana;
         public float rangeAttack;
+        public float damage;
     }
 
 }

@@ -29,7 +29,7 @@ namespace ParadoxGameStudio
         private void Start()
         {
             Init();
-            player.gun = this;
+            // player.gun = this;
         }
 
         protected void Init()
@@ -80,7 +80,7 @@ namespace ParadoxGameStudio
             }
 
             Bullet b = Instantiate(gunSetting.bulletPrefab);
-            b.Init(this);
+            // b.Init(this);
             b.transform.position = player.pointGun.position;
 
             b.Fire(Mathf.Sign(player.transform.localScale.x));

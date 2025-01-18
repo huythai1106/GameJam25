@@ -8,12 +8,12 @@ namespace ParadoxGameStudio
     {
         [SerializeField] private Rigidbody2D body;
         [SerializeField] private float force;
-        private Gun gun;
+        private Player player;
         private bool isTrigger = false;
 
-        public void Init(Gun gun)
+        public void Init(Player p)
         {
-            this.gun = gun;
+            player = p;
             Destroy(gameObject, 3f);
         }
 
@@ -30,7 +30,7 @@ namespace ParadoxGameStudio
             if (other.CompareTag("Monster"))
             {
                 BaseCrep creep = other.GetComponent<BaseCrep>();
-                creep.HitDamage(gun.gunSetting.damage);
+                creep.HitDamage(player.characterSetting.damage);
             }
 
             Destroy(gameObject);
