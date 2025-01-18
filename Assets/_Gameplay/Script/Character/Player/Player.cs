@@ -14,6 +14,9 @@ namespace ParadoxGameStudio
 
     public class Player : BaseCharacter
     {
+        public bool isUnlockSkill1 = false;
+        public bool isUnlockSkill2 = false;
+
         [Header("Player")]
         // public Gun gun;
         public GunSetting gunSetting;
@@ -25,8 +28,10 @@ namespace ParadoxGameStudio
         public int maxCountJump = 1;
         public StatePlayer statePlayer = StatePlayer.Normal;
         public bool isCharging = false;
+        public int maxMana = 9;
 
         [SerializeField] private float defaultGravity;
+        public AudioSource audioSource;
 
 
         [Header("CheckGround")]
@@ -53,20 +58,38 @@ namespace ParadoxGameStudio
 
         protected override void Update()
         {
+            if (isDead) return;
+            // PreventPos();
+
             base.Update();
             movement.Update();
         }
 
         protected override void FixedUpdate()
         {
+            if (isDead) return;
+
             base.FixedUpdate();
             movement.FixedUpdate();
+        }
+
+        private void PreventPos()
+        {
+            float minX = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)).x;
+            float maxX = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0)).x;
+            float minY = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)).y;
+            float maxY = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
+
+            transform.ClampPosition(minX, maxX, minY, maxY);
         }
 
         public override void Attack()
         {
             if (isInAttack) return;
             isInAttack = true;
+            properties.currentMana = Mathf.Min(properties.currentMana + 1, maxMana);
+            manaUI?.Change(properties.currentMana);
+            SoundManager.instance.PlaySoundEffect("drinking");
 
             state.PlayAnim(1, "Attack_0", false, (e) =>
             {
@@ -78,6 +101,11 @@ namespace ParadoxGameStudio
         public void ChargeAttack()
         {
             if (isInAttack) return;
+            if (properties.currentMana < 3) return;
+
+            properties.currentMana -= 3;
+            manaUI?.Change(properties.currentMana);
+
             isInAttack = true;
 
             isCharging = true;
@@ -103,6 +131,13 @@ namespace ParadoxGameStudio
 
         public void UltimateAttack()
         {
+            if (isInAttack) return;
+            if (statePlayer == StatePlayer.Bubbling) return;
+            if (properties.currentMana < 3) return;
+
+            properties.currentMana -= 3;
+            manaUI?.Change(properties.currentMana);
+
             ChangeState(StatePlayer.Bubbling);
             TurnOnShield();
         }
@@ -111,6 +146,7 @@ namespace ParadoxGameStudio
         {
             if (e.Data == eventAttack_0)
             {
+                SoundManager.instance.PlaySoundEffect("lightAtk");
                 Bullet b = Instantiate(gunSetting.bulletPrefab);
                 b.Init(this);
                 b.transform.position = pointGun.position;
@@ -123,8 +159,10 @@ namespace ParadoxGameStudio
         {
             if (e.Data == eventAttack_1)
             {
+                SoundManager.instance.PlaySoundEffect("chargeAtk");
                 Bullet b = Instantiate(gunSetting.bulletPrefab);
                 b.Init(this);
+                b.damage = 3;
                 b.transform.position = pointGun.position;
 
                 b.Fire(Mathf.Sign(transform.localScale.x));
@@ -142,8 +180,6 @@ namespace ParadoxGameStudio
                 movement.HandleJump();
             }
         }
-
-
 
         public override void TurnOnShield()
         {
@@ -164,10 +200,11 @@ namespace ParadoxGameStudio
         private void OnCollisionEnter2D(Collision2D collision)
         {
             Vector3 hit = collision.contacts[0].normal;
-            if (hit.y > 0)
+            Debug.Log(hit.y);
+            if (hit.y > 0.1f)
             {
                 EffectManager.Instance.CreatedEffect("hitGround", center);
-                movement.isGrounded = true;
+                // movement.isGrounded = true;
                 // _character.state.SetStatePlayer(StatePlayer.Jump, false);
                 movement.jumpStep = maxCountJump;
                 // _character.canControll = true;
@@ -244,6 +281,20 @@ namespace ParadoxGameStudio
         public void EventChangeBubbling()
         {
             body.gravityScale = 0;
+        }
+
+        public override void Dead()
+        {
+            base.Dead();
+            movement.rotate = Vector2.zero;
+            anim.GetComponent<Renderer>().enabled = false;
+
+            Invoke(nameof(ResetScene), 2f);
+        }
+
+        public void ResetScene()
+        {
+            GameManager.Instance.ResetScene();
         }
     }
 }

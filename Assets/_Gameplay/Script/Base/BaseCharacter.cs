@@ -9,11 +9,11 @@ namespace ParadoxGameStudio
     public struct Properties
     {
         public float speed;
-        public float maxHealth;
-        public float currentHealth;
+        public int maxHealth;
+        public int currentHealth;
         public float jumpPower;
-        public float currentMana;
-        public float healthShield;
+        public int currentMana;
+        public int healthShield;
     }
 
     public class BaseCharacter : MonoBehaviour
@@ -22,13 +22,16 @@ namespace ParadoxGameStudio
         internal Collider2D col;
         internal ControllerBase controller;
 
+        [Header("UI")]
+        public StatusStackUI healthUI;
+        public StatusStackUI manaUI;
+        public StatusStackUI shieldUI;
 
         [Header("Common")]
         public Properties properties;
         public TypeCharacter typeCharacter;
         public BaseCharacterSetting characterSetting;
         public Transform currentTarget;
-        public bool isPoisonous;
         public Transform pointGun;
         public SkeletonAnimation anim;
         public ParticleSystem shieldParticle;
@@ -45,39 +48,20 @@ namespace ParadoxGameStudio
             Init();
         }
 
+        protected virtual void Init()
+        {
+            SetupProperties();
+        }
+
         protected virtual void Update()
         {
-            UpdateEffects();
-            HandleEffect();
+            if (isDead) return;
         }
 
         protected virtual void FixedUpdate()
         {
+            if (isDead) return;
             // SetTarget();
-        }
-
-        private void UpdateEffects()
-        {
-            // foreach (TypeEffect entry in effects.Keys.ToList())
-            // {
-            //     if (effects[entry].timeCounter > 0)
-            //     {
-            //         effects[entry].timeCounter -= Time.deltaTime;
-            //         if (effects[entry].timeCounter <= 0)
-            //         {
-            //             effects[entry].OffEffect(this);
-            //             effects.Remove(entry);
-            //         }
-            //     }
-            // }
-        }
-
-        private void HandleEffect()
-        {
-            if (isPoisonous)
-            {
-                // Do something
-            }
         }
 
         public void FlipCharacter(bool value) // true is scale right, false is left
@@ -100,11 +84,6 @@ namespace ParadoxGameStudio
             }
         }
 
-        protected virtual void Init()
-        {
-            SetupProperties();
-        }
-
         public virtual void SetupProperties()
         {
             properties.speed = characterSetting.speed;
@@ -113,11 +92,22 @@ namespace ParadoxGameStudio
             properties.jumpPower = characterSetting.jumpPower;
             properties.currentMana = characterSetting.mana;
             properties.healthShield = characterSetting.startHealShield;
+
+            healthUI?.SetUp(properties.maxHealth);
+            healthUI?.Change(properties.currentHealth);
+
+            manaUI?.SetUp(characterSetting.maxMana);
+            manaUI?.Change(characterSetting.mana);
+
+            shieldUI?.SetUp(characterSetting.maxHealthShield);
+            shieldUI?.Change(properties.healthShield);
         }
 
         public virtual void TurnOnShield()
         {
+            SoundManager.instance.PlaySoundEffect("shieldOn");
             properties.healthShield = characterSetting.maxHealthShield;
+            shieldUI?.Change(properties.healthShield);
         }
 
         public virtual void SetTarget(Transform t)
@@ -126,25 +116,29 @@ namespace ParadoxGameStudio
         }
         public virtual void Attack() { }
 
-        public virtual void HitDamage(float damage)
+        public virtual void HitDamage(int damage)
         {
-            StartCoroutine(BlingBling());
-            EffectManager.Instance.CreatedEffect("bloodExp", transform);
-
+            SoundManager.instance.PlaySoundEffect("hitBody");
             if (properties.healthShield > 0)
             {
                 properties.healthShield = Mathf.Max(0, properties.healthShield - damage);
+                shieldUI?.Change(properties.healthShield);
                 if (properties.healthShield == 0)
                 {
                     BreakShield();
                 }
             }
-
-            properties.currentHealth = Mathf.Max(0, properties.currentHealth - damage);
-
-            if (properties.currentHealth == 0)
+            else
             {
-                Dead();
+                StartCoroutine(BlingBling());
+                EffectManager.Instance.CreatedEffect("bloodExp", transform);
+                properties.currentHealth = Mathf.Max(0, properties.currentHealth - damage);
+                healthUI?.Change(properties.currentHealth);
+
+                if (properties.currentHealth == 0)
+                {
+                    Dead();
+                }
             }
         }
 
@@ -153,13 +147,29 @@ namespace ParadoxGameStudio
         public virtual void Dead()
         {
             isDead = true;
+            EffectDead();
+        }
+
+        public void EffectDead()
+        {
+            EffectManager.Instance.CreatedEffect("smokeExp", transform.position);
+            EffectManager.Instance.CreatedEffect("bubbleRising", transform.position, new Option()
+            {
+                timeDestroy = 6f,
+                offset = new Vector3(0, -1, 0),
+            });
         }
 
         public IEnumerator BlingBling()
         {
-            anim?.skeleton.SetColor(new Color(1, 0.3f, 0.3f));
-            yield return new WaitForSeconds(0.1f);
-            anim?.skeleton.SetColor(Color.white);
+            if (!isDead)
+            {
+                anim?.skeleton.SetColor(new Color(1, 0.3f, 0.3f));
+                yield return new WaitForSeconds(0.1f);
+                if (!isDead)
+                    anim?.skeleton.SetColor(Color.white);
+            }
+
         }
     }
 }

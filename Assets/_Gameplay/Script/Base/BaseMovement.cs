@@ -29,11 +29,17 @@ namespace ParadoxGameStudio
         public virtual void Update()
         {
             TransformRotateToDirect();
+            CheckState();
         }
 
         public virtual void FixedUpdate()
         {
             MovingNormal();
+        }
+
+        protected virtual void CheckState()
+        {
+
         }
 
         public void TransformRotateToDirect()

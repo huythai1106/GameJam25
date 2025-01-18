@@ -8,13 +8,14 @@ namespace ParadoxGameStudio
     public class BaseCharacterSetting : ScriptableObject
     {
         public float speed;
-        public float maxHealth;
-        public float maxHealthShield;
-        public float startHealShield;
+        public int maxHealth;
+        public int maxHealthShield;
+        public int startHealShield;
         public float jumpPower;
-        public float mana;
+        public int mana;
+        public int maxMana;
         public float rangeAttack;
-        public float damage;
+        public int damage;
     }
 
 }

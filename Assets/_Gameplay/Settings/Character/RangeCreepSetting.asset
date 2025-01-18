@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72b7c9d755ee9cb47841868ceec4360a, type: 3}
   m_Name: RangeCreepSetting
   m_EditorClassIdentifier: 
-  speed: 0
-  maxHealth: 0
+  speed: 2
+  maxHealth: 3
+  maxHealthShield: 0
+  startHealShield: 0
   jumpPower: 0
   mana: 0
-  rangeAttack: 5
+  rangeAttack: 6
+  damage: 1

@@ -16,8 +16,11 @@ namespace ParadoxGameStudio
 
         protected override void HandleControl()
         {
+            if (creep.isInAttack) return;
+
             if (creep.IsTargetInRange())
             {
+                character.FlipCharacter(character.currentTarget.transform.position.x > transform.position.x);
                 creep.movement.rotate = Vector2.zero;
                 creep.Attack();
             }

@@ -22,8 +22,8 @@ namespace ParadoxGameStudio
         public override void Update()
         {
             base.Update();
+            CheckGrounded();
 
-            CheckState();
             if (jumpBufferCounter > 0 && isGrounded)
             {
                 Jump();
@@ -37,7 +37,7 @@ namespace ParadoxGameStudio
             Moving();
         }
 
-        public void CheckState()
+        protected override void CheckState()
         {
             if (player.statePlayer == StatePlayer.Bubbling)
             {
@@ -96,16 +96,17 @@ namespace ParadoxGameStudio
 
         private void Jump()
         {
+            SoundManager.instance.PlaySoundEffectList("jump");
             isGrounded = false;
             body.velocity = new Vector2(body.velocity.x, character.properties.jumpPower);
             jumpBufferCounter = 0f;
         }
 
-        // private void CheckGrounded()
-        // {
-        //     // RaycastHit2D ray = Physics2D.BoxCast(player.center.position, player.size, 0f, Vector2.down, .01f, GameManager.Instance.layerGround);
-        //     // isGrounded = ray.collider != null;
-        // }
+        private void CheckGrounded()
+        {
+            RaycastHit2D ray = Physics2D.BoxCast(player.center.position, player.size, 0f, Vector2.down, .01f, GameManager.Instance.layerGround);
+            isGrounded = ray.collider != null;
+        }
 
         public void ResetMoverment()
         {

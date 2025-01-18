@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   speed: 5
-  maxHealth: 100
+  maxHealth: 5
+  maxHealthShield: 3
+  startHealShield: 0
   jumpPower: 10
-  mana: 0
+  mana: 3
+  maxMana: 9
+  rangeAttack: 0
+  damage: 1

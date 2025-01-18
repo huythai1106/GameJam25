@@ -6,9 +6,16 @@ namespace ParadoxGameStudio
 {
     public class CurveCrep : BaseCrep
     {
-        public override void ActiveAttack()
-        {
+        public GunSetting gunSetting;
 
+        public override void HandleAttack()
+        {
+            base.HandleAttack();
+            Bullet b = Instantiate(gunSetting.bulletPrefab);
+            b.Init(this);
+            b.transform.position = pointGun.position;
+
+            b.FireCurve(currentTarget);
         }
     }
 }

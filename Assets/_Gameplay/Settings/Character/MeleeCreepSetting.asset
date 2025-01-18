@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: MeleeCreepSetting
   m_EditorClassIdentifier: 
   speed: 3
-  maxHealth: 100
+  maxHealth: 3
+  maxHealthShield: 0
+  startHealShield: 0
   jumpPower: 0
   mana: 0
-  rangeAttack: 1
+  rangeAttack: 0.8
+  damage: 1
