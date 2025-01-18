@@ -16,8 +16,8 @@ namespace ParadoxGameStudio
         private float ultimateHoldingTime;
         private float attackHoldingTime;
         private bool isReachedThreshholdAttack;
-        [SerializeField] private float timeToCastSecondUltimate = 1f;
-        [SerializeField] private float timeToCastSecondAttack = 1f;
+        [SerializeField] private float timeToCastSecondUltimate = 0.5f;
+        [SerializeField] private float timeToCastSecondAttack = 0.5f;
 
         [SerializeField] private UnityEvent onBaseUltimateCast;
         [SerializeField] private UnityEvent onSecondUltimateCast;
@@ -74,7 +74,7 @@ namespace ParadoxGameStudio
         }
         public void OnAttackButtonUp()
         {
-            isHoldingAttackButton = false;
+
 
             if (attackHoldingTime > timeToCastSecondAttack)
             {

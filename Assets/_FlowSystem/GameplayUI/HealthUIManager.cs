@@ -6,18 +6,16 @@ using UnityEngine.UI;
 
 public class HealthUIManager : MonoBehaviour
 {
-	[SerializeField] private Slider heathProgressBar;
+	[SerializeField] private StatusStackUI heathProgressBar;
 
 	[SerializeField] private float defaultAnimationProgressDuration = 0.5f;
 
 	[Button]
-	public void UpdateHealthBar(float value, float duration = -1, Action onComplete = null)
+	public void UpdateHealthBar(int value)
 	{
 		DOTween.Kill(heathProgressBar);
 
-		heathProgressBar.DOValue(value, duration > 0 ? duration : defaultAnimationProgressDuration).OnComplete(() =>
-		{
-			onComplete?.Invoke();
-		});
+		heathProgressBar.Change(value);
+
 	}
 }
