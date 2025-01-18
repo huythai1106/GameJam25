@@ -16,11 +16,13 @@ namespace ParadoxGameStudio
         [Header("Player")]
         public Gun gun;
         public PlayerMovement movement;
+        public PlayerState state;
         public GameObject currentOneWayPlatform;
         public float range;
         public bool isShoot = false;
         public int maxCountJump = 1;
         public StatePlayer statePlayer = StatePlayer.Normal;
+        public bool isCharging = false;
 
         [SerializeField] private float defaultGravity;
 
@@ -33,6 +35,7 @@ namespace ParadoxGameStudio
         {
             base.Init();
             movement = new PlayerMovement(this, body);
+            state = new PlayerState(this, anim);
             body.gravityScale = defaultGravity;
         }
 
@@ -162,6 +165,16 @@ namespace ParadoxGameStudio
             {
                 EventChangeBubbling();
             }
+        }
+
+        public void StartCharge()
+        {
+            Debug.Log("StartCharge");
+        }
+
+        public void EndCharge()
+        {
+            Debug.Log("EndCharge");
         }
 
         public void EventChangeNormal()
