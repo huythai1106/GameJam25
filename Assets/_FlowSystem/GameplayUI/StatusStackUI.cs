@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StatusStackUI
+public class StatusStackUI : MonoBehaviour
 {
 	[SerializeField] private float scaleUpDuration;
 	[SerializeField] private float scaleDownDuration;
 	[SerializeField] private List<StatusUnit> statusUnits;
+	[SerializeField] private StatusUnit statusUnitPrefab;
 
 
 	[Button]
@@ -18,13 +18,13 @@ public class StatusStackUI
 		{
 			if (i < amount)
 			{
-				if (statusUnits[i].gameObject.activeSelf == false)
+				if (statusUnits[i].isActiveHPIcon() == false)
 				{
 
 					statusUnits[i].ScaleUpStatusUnit(scaleUpDuration);
 				}
 			}
-			else if (i >= amount && statusUnits[i].gameObject.activeSelf == true)
+			else if (i >= amount && statusUnits[i].isActiveHPIcon() == true)
 			{
 				statusUnits[i].ScaleDownStatusUnit(scaleDownDuration);
 
@@ -33,14 +33,21 @@ public class StatusStackUI
 
 	}
 
+
+
 	public void GoMax()
 	{
 		Change(statusUnits.Count);
 	}
 
+	[Button]
 	public void SetUp(int unitCount)
 	{
-
+		for (int i = 0; i < unitCount; i++)
+		{
+			var unit = Instantiate(statusUnitPrefab, transform);
+			statusUnits.Add(unit);
+		}
 	}
 
 
@@ -48,28 +55,5 @@ public class StatusStackUI
 	public int GetMaxUnitCount()
 	{
 		return statusUnits.Count;
-	}
-}
-
-
-public class StatusUnit : MonoBehaviour
-{
-
-	[SerializeField] private Image healthIcon;
-
-	public void ScaleUpStatusUnit(float duration)
-	{
-		healthIcon.gameObject.SetActive(true);
-		DOTween.Kill(healthIcon);
-		healthIcon.transform.DOScale(1, duration);
-	}
-
-	public void ScaleDownStatusUnit(float duration)
-	{
-		DOTween.Kill(healthIcon);
-		healthIcon.transform.DOScale(0, duration).OnComplete(() =>
-		{
-			healthIcon.gameObject.SetActive(false);
-		});
 	}
 }
