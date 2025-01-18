@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ParadoxGameStudio
 {
+    [Serializable]
     public class PlayerMovement : BaseMovement
     {
         internal bool isGrounded = false;
@@ -33,6 +35,25 @@ namespace ParadoxGameStudio
         public override void FixedUpdate()
         {
             Moving();
+        }
+
+        public void CheckState()
+        {
+            if (isGrounded)
+            {
+                if (rotate.x != 0)
+                {
+                    player.state.SetStatePlayer(StateCharacter.Run);
+                }
+                else
+                {
+                    player.state.SetStatePlayer(StateCharacter.Idle);
+                }
+            }
+            else
+            {
+                player.state.SetStatePlayer(StateCharacter.Jump);
+            }
         }
 
         private void Moving()
